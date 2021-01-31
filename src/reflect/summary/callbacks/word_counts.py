@@ -9,6 +9,7 @@ import dash_bootstrap_components as dbc
 import funcy as fn
 
 from reflect.app import app
+from reflect.config import AppConfig
 from reflect.summary.page import PAGE_PREFIX
 from reflect.database.mysql import reflectdb
 from reflect.utils import _get_query_params
@@ -17,39 +18,38 @@ NOT_WORD_OR_DIGIT_EXPR = re.compile(r"([^\d\w\s])")
 
 
 def clean_and_clount_text(entries: List[str]) -> List[Tuple[str, int]]:
-    texts = fn.lpluck_attr("text", entries)
+    texts = fn.pluck_attr("text", entries)
     cleaner = fn.rcompose(
         lambda s: s.lower(),
         lambda s: s.strip(),
         lambda s: NOT_WORD_OR_DIGIT_EXPR.sub("", s),
         lambda s: s.split(),
-        lambda s: fn.lflatten(s)
+        lambda s: fn.flatten(s)
     )
-    cleaned = fn.lflatten(fn.map(cleaner, texts))
+    cleaned = fn.flatten(fn.map(cleaner, texts))
     valid_words = fn.lfilter(lambda x: x not in _stop_words.ENGLISH_STOP_WORDS, cleaned)
     return Counter(valid_words).most_common(5)
 
 
-def make_table(rows: List[Tuple[str, int]]) -> dbc.Table:
-    table_header = [
-        html.Thead(html.Tr([html.Th(column) for column in ("Word", "Count")]))
+def make_cards(_type: str, words: List[str] = None):
+    word_badges = [
+        dbc.Badge(
+            children=[word, dbc.Badge(count, color="light", className="ml-1")],
+            className="mr-1",
+            style={"background": AppConfig.colour[_type.lower()]}
+        ) for word, count in words
     ]
-
-    table_rows = [
-        html.Tr(
-            [
-                html.Td(word),
-                html.Td(dbc.Badge(count, color="primary", className="ml-1"))
-            ]
-        ) for word, count in rows
-    ]
-
-    table_body = [
-        html.Tbody(table_rows)
-    ]
-
-    table = dbc.Table(table_header + table_body, bordered=True)
-    return table
+    return dbc.Col([
+        dbc.Row(
+            children=[
+                html.H1(
+                    f"{AppConfig.assets[_type.lower()]} {_type.capitalize()}",
+                    style={"font-weight": "bold", "padding-right": "20px"}
+                ),
+            ],
+        ),
+        dbc.Row(word_badges),
+    ])
 
 
 @app.callback(
@@ -62,4 +62,5 @@ def calculate_word_counts(url: str) -> html.Div:
         entries = reflectdb.get_all_entries_for_project(fn.first(params["project"]))
         groups = fn.group_by(lambda x: x.type, entries)
         cleaned_entries = fn.walk_values(clean_and_clount_text, groups)
-        return dbc.Row(list(fn.walk_values(make_table, cleaned_entries).values()))
+        cards = fn.lmap(lambda x: make_cards(*x), list(cleaned_entries.items()))
+        return dbc.Row(cards)

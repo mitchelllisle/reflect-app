@@ -9,6 +9,6 @@ layout = html.Div(
     children=[
         dcc.Location(id=f'{PAGE_PREFIX}-url'),
         html.Br(),
-        dbc.Col(id=f"{PAGE_PREFIX}-words"),
+        html.Div(id=f"{PAGE_PREFIX}-words"),
     ],
 )

@@ -30,10 +30,20 @@ class ColourConfig:
     wondering = "#FFC666"
     bad = "#F574A2"
 
+    def __getitem__(self, item):
+        return getattr(self, item)
+
 
 class AssetConfig:
     logo = "/assets/logo.png"
     missing = "/assets/404.gif"
+
+    good = "😀"
+    wondering = "🤔"
+    bad = "😓"
+
+    def __getitem__(self, item):
+        return getattr(self, item)
 
 
 class SemanticProjectNameConfig:
