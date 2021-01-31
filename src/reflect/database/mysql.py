@@ -1,5 +1,5 @@
 import os
-from typing import Tuple, Union, List, Dict
+from typing import Tuple, Union, List, Dict, Optional
 from pathlib import Path
 
 from datetime import datetime
@@ -7,7 +7,7 @@ from mysql.connector.pooling import MySQLConnectionPool
 import funcy as fn
 from pydantic import SecretStr
 from reflect.config import AppConfig
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 from reflect.utils import logger
 
 
@@ -17,12 +17,17 @@ class Entry(BaseModel):
     text: str
     type: str
     created_at: datetime
+    votes: Optional[int]
 
 
 class Project(BaseModel):
     id: str
     name: str
     created_at: datetime
+
+
+class Votes(BaseModel):
+    amount: int = 0
 
 
 class MySQLDB:
@@ -147,15 +152,37 @@ class ReflectMySQL(MySQLDB):
 
     def get_all_entries_for_project(self, project_id: str) -> List[Entry]:
         stmt = """
-        SELECT * FROM project_entries WHERE project_name = %s ORDER BY created_at DESC
+        SELECT
+        pe.*,
+        pv.votes
+        FROM project_entries AS pe
+        LEFT JOIN (
+            SELECT entry_id, COUNT(1) AS votes
+            FROM project_entries_votes
+            WHERE project_name = %s GROUP BY entry_id
+        ) AS pv ON pe.id = pv.entry_id
+        WHERE pe.project_name = %s
+        ORDER BY pe.created_at DESC;
         """
-        return [Entry(**x) for x in self._query(stmt, (project_id, ))]
+        return [Entry(**x) for x in self._query(stmt, (project_id, project_id))]
 
     def get_all_projects(self) -> List[Project]:
         stmt = """
         SELECT * FROM projects ORDER BY created_at DESC
         """
         return [Project(**x) for x in self._query(stmt)]
+
+    def save_vote(self, project_name: str, event_id: str):
+        stmt = """
+        INSERT INTO project_entries_votes (id, project_name, entry_id) VALUES (UUID(), %s, %s)
+        """
+        self._write(stmt, (project_name, event_id))
+
+    def get_votes(self, event_id: str) -> Votes:
+        stmt = """
+        SELECT COUNT(1) AS votes FROM project_entries_votes WHERE entry_id = %s;
+        """
+        return Votes(**next(self._query(stmt, (event_id, ))))
 
 
 reflectdb = ReflectMySQL(

@@ -4,5 +4,6 @@ from reflect.project.callbacks.add_new_element import (
     add_to_great,
     add_to_wonder,
     add_to_bad,
-    get_entries
+    get_entries,
+    update_vote
 )

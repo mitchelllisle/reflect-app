@@ -9,5 +9,5 @@ from reflect.about.page import PAGE_PREFIX
     Output(component_id=f'{PAGE_PREFIX}-version', component_property='children'),
     [Input(component_id=f'{PAGE_PREFIX}-url', component_property='n_clicks')],
 )
-def get_version(url: int):
+def get_version(_: int):
     return reflect.__version__

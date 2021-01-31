@@ -1,7 +1,7 @@
 from typing import Union, Dict, List
 
 import dash
-from dash.dependencies import Output, Input, State
+from dash.dependencies import Output, Input, State, MATCH, ALL
 import dash_bootstrap_components as dbc
 import dash_html_components as html
 import funcy as fn
@@ -15,10 +15,28 @@ from reflect.database.mysql import reflectdb, Entry
 def create_elements(existing: List[Entry], colour: str) -> List[dbc.ListGroupItem]:
     return [
         dbc.ListGroupItem(
-            children=[v.text, html.Div("👍️", style={"float": "right"})],
+            children=[
+                dbc.Button(v.text, id={"type": "entry-display", "index": v.id}, color="link"),
+                html.Div(f"👍 {0 if v.votes is None else v.votes}", id={"type": "like-counter", "index": v.id}, style={"float": "right"})
+            ],
             style={"border": f"1px solid {colour}"}
         ) for v in existing
     ]
+
+
+@app.callback(
+    Output(component_id={"type": "like-counter", "index": MATCH}, component_property='children'),
+    [
+        Input(component_id={"type": "entry-display", "index": MATCH}, component_property="n_clicks"),
+        Input(component_id=f"{PAGE_PREFIX}-name", component_property="children")
+    ],
+    [State(component_id={"type": "entry-display", "index": MATCH}, component_property="id")]
+)
+def update_vote(clicks: int, project: str, entry: str):
+    if clicks:
+        entry_id = fn.get_in(entry, ["index"])
+        reflectdb.save_vote(project, entry_id)
+    return dash.no_update
 
 
 @app.callback(
@@ -39,7 +57,6 @@ def get_entries(interval: int, project_name: str):
         create_elements(fn.filter(lambda x: x.type == "WONDERING", entries), AppConfig.colour.wondering),
         create_elements(fn.filter(lambda x: x.type == "BAD", entries), AppConfig.colour.bad)
     )
-
 
 
 @app.callback(

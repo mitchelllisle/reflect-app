@@ -9,6 +9,6 @@ layout = html.Div(
     children=[
         dcc.Location(id=f'{PAGE_PREFIX}-url'),
         html.Br(),
-        html.Div(id=f"{PAGE_PREFIX}-words"),
+        dbc.Card(id=f"{PAGE_PREFIX}-words", body=True, style={"padding": "5%"}),
     ],
 )

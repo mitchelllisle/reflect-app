@@ -63,4 +63,4 @@ def calculate_word_counts(url: str) -> html.Div:
         groups = fn.group_by(lambda x: x.type, entries)
         cleaned_entries = fn.walk_values(clean_and_clount_text, groups)
         cards = fn.lmap(lambda x: make_cards(*x), list(cleaned_entries.items()))
-        return dbc.Row(cards)
+        return dbc.Row(cards, style={"margin-left": "60px"})

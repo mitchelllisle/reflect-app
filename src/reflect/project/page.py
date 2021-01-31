@@ -36,7 +36,7 @@ modal = html.Div(
 
 layout = html.Div([
     dcc.Location(id=f'{PAGE_PREFIX}-url'),
-    dcc.Interval(id=f"{PAGE_PREFIX}-refresh", interval=300),
+    dcc.Interval(id=f"{PAGE_PREFIX}-refresh", interval=200),
     dcc.Interval(id=f"{PAGE_PREFIX}-timer-refresh", interval=1000),
     html.Span(id=f"{PAGE_PREFIX}-timer-start", style={"display": "none"}),
     html.Span(id=f"{PAGE_PREFIX}-timer-end", style={"display": "none"}),
