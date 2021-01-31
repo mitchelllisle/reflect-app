@@ -36,13 +36,14 @@ modal = html.Div(
 
 layout = html.Div([
     dcc.Location(id=f'{PAGE_PREFIX}-url'),
-    dcc.Interval(id=f"{PAGE_PREFIX}-refresh", interval=200),
+    dcc.Interval(id=f"{PAGE_PREFIX}-refresh", interval=1000, max_intervals=3600),
     dcc.Interval(id=f"{PAGE_PREFIX}-timer-refresh", interval=1000),
     html.Span(id=f"{PAGE_PREFIX}-timer-start", style={"display": "none"}),
     html.Span(id=f"{PAGE_PREFIX}-timer-end", style={"display": "none"}),
     modal,
     html.Br(),
     dbc.Row([
+        html.Span(id=f"{PAGE_PREFIX}-id", style={"display": "none"}),
         dbc.Col(html.H1(id=f"{PAGE_PREFIX}-name", style={"font-weight": "bold", "font-size": "50px"})),
         dbc.Col(
             dbc.Button(

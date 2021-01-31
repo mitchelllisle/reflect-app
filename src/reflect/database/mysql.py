@@ -178,11 +178,11 @@ class ReflectMySQL(MySQLDB):
         """
         self._write(stmt, (project_name, event_id))
 
-    def get_votes(self, event_id: str) -> Votes:
+    def get_votes(self, entry_id: str) -> Votes:
         stmt = """
         SELECT COUNT(1) AS votes FROM project_entries_votes WHERE entry_id = %s;
         """
-        return Votes(**next(self._query(stmt, (event_id, ))))
+        return Votes(**next(self._query(stmt, (entry_id, ))))
 
 
 reflectdb = ReflectMySQL(

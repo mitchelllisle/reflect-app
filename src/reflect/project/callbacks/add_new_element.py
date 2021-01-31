@@ -1,7 +1,7 @@
 from typing import Union, Dict, List
 
 import dash
-from dash.dependencies import Output, Input, State, MATCH, ALL
+from dash.dependencies import Output, Input, State, MATCH
 import dash_bootstrap_components as dbc
 import dash_html_components as html
 import funcy as fn
@@ -17,7 +17,10 @@ def create_elements(existing: List[Entry], colour: str) -> List[dbc.ListGroupIte
         dbc.ListGroupItem(
             children=[
                 dbc.Button(v.text, id={"type": "entry-display", "index": v.id}, color="link"),
-                html.Div(f"👍 {0 if v.votes is None else v.votes}", id={"type": "like-counter", "index": v.id}, style={"float": "right"})
+                html.Div(
+                    f"👍 {0 if v.votes is None else v.votes}",
+                    id={"type": "like-counter", "index": v.id},
+                    style={"float": "right"})
             ],
             style={"border": f"1px solid {colour}"}
         ) for v in existing
@@ -28,9 +31,10 @@ def create_elements(existing: List[Entry], colour: str) -> List[dbc.ListGroupIte
     Output(component_id={"type": "like-counter", "index": MATCH}, component_property='children'),
     [
         Input(component_id={"type": "entry-display", "index": MATCH}, component_property="n_clicks"),
-        Input(component_id=f"{PAGE_PREFIX}-name", component_property="children")
     ],
-    [State(component_id={"type": "entry-display", "index": MATCH}, component_property="id")]
+    [
+        State(component_id=f"{PAGE_PREFIX}-name", component_property="children"),
+        State(component_id={"type": "entry-display", "index": MATCH}, component_property="id")]
 )
 def update_vote(clicks: int, project: str, entry: str):
     if clicks:

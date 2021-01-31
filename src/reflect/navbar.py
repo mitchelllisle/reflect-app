@@ -2,7 +2,10 @@ import dash_html_components as html
 import dash_bootstrap_components as dbc
 import funcy as fn
 
-NavLink = fn.partial(html.A, style={"float": "right", "font-weight": "bold", "padding-left": "20px"})
+NavLink = fn.partial(
+    html.A,
+    style={"float": "right", "color": "black", "font-weight": "bold", "padding-left": "20px"}
+)
 
 navbar = dbc.Navbar(
     [

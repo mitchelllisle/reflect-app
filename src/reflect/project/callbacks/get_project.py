@@ -1,5 +1,3 @@
-from typing import Dict
-
 from dash.dependencies import Output, Input
 import funcy as fn
 

@@ -16,12 +16,10 @@ def get_existing_projects(url: int):
     return dbc.ListGroup(
         [
             dbc.ListGroupItem(
-            html.A(
-                children=[
-                    html.B(f"{project.name}"),
+                html.Div([
+                    html.A(html.B(f"{project.name}"), href=f"/project?name={project.name}"),
                     dbc.FormText(f"Created: {project.created_at}")
-                ],
-                href=f"/project?name={project.name}"
-            )
-        ) for project in projects]
+                ])
+            ) for project in projects
+        ]
     )
