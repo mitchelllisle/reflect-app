@@ -17,7 +17,7 @@ def create_elements(existing: List[Entry], colour: str) -> List[dbc.ListGroupIte
     return [
         dbc.ListGroupItem(
             children=[
-                dbc.Button(v.text, id={"type": "entry-display", "index": v.id}, color="link"),
+                dbc.Button(v.text, id={"type": "entry-display", "index": v.id}, color="link", outline=False),
                 html.Div(
                     f"👍 {0 if v.votes is None else v.votes}",
                     id={"type": "like-counter", "index": v.id},
@@ -59,6 +59,9 @@ def save_entry(save: int, submit: int, value: str, project_name: str, _type: str
         Output(component_id=f'{PAGE_PREFIX}-great-list', component_property='children'),
         Output(component_id=f'{PAGE_PREFIX}-wonder-list', component_property='children'),
         Output(component_id=f'{PAGE_PREFIX}-bad-list', component_property='children'),
+        Output(component_id=f"{PAGE_PREFIX}-great-input", component_property="value"),
+        Output(component_id=f"{PAGE_PREFIX}-wonder-input", component_property="value"),
+        Output(component_id=f"{PAGE_PREFIX}-bad-input", component_property="value")
     ],
     [
         Input(component_id=f"{PAGE_PREFIX}-refresh", component_property="n_intervals"),
@@ -94,5 +97,8 @@ def get_entries(
     return (
         create_elements(fn.filter(lambda x: x.type == "GOOD", entries), AppConfig.colour.good),
         create_elements(fn.filter(lambda x: x.type == "WONDERING", entries), AppConfig.colour.wondering),
-        create_elements(fn.filter(lambda x: x.type == "BAD", entries), AppConfig.colour.bad)
+        create_elements(fn.filter(lambda x: x.type == "BAD", entries), AppConfig.colour.bad),
+        None,
+        None,
+        None
     )
