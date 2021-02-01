@@ -80,7 +80,7 @@ layout = html.Div([
     dbc.Row([
         dbc.Col(
             children=[
-                html.H3("😀 It was great that...", style={"font-weight": "bold"}),
+                html.H3(f"{AppConfig.assets.good} It was great that...", style={"font-weight": "bold"}),
                 dbc.InputGroup([
                     dbc.Input(id=f"{PAGE_PREFIX}-great-input", placeholder="..."),
                     dbc.Button(id=f"{PAGE_PREFIX}-great-submit", children="⮑", color="#FFF"),
@@ -91,7 +91,7 @@ layout = html.Div([
         ),
         dbc.Col(
             children=[
-                html.H3("🤔 I'm wondering about...", style={"font-weight": "bold"}),
+                html.H3(f"{AppConfig.assets.wondering} I'm wondering about...", style={"font-weight": "bold"}),
                 dbc.InputGroup([
                     dbc.Input(id=f"{PAGE_PREFIX}-wonder-input", placeholder="..."),
                     dbc.Button(id=f"{PAGE_PREFIX}-wonder-submit", children="⮑", color="#FFF")
@@ -102,7 +102,7 @@ layout = html.Div([
         ),
         dbc.Col(
             children=[
-                html.H3("😓 It wasn't so great that...", style={"font-weight": "bold"}),
+                html.H3(f"{AppConfig.assets.bad} It wasn't so great that...", style={"font-weight": "bold"}),
                 dbc.InputGroup([
                     dbc.Input(id=f"{PAGE_PREFIX}-bad-input", placeholder="..."),
                     dbc.Button(id=f"{PAGE_PREFIX}-bad-submit", children="⮑", color="#FFF")
