@@ -39,10 +39,13 @@ def create_elements(existing: List[Entry], colour: str) -> List[dbc.ListGroupIte
     ]
 )
 def update_vote(clicks: int, project: str, entry: str):
+    entry_id = fn.get_in(entry, ["index"])
     if clicks:
-        entry_id = fn.get_in(entry, ["index"])
         reflectdb.save_vote(project, entry_id)
-    return dash.no_update
+        votes = reflectdb.get_votes(entry_id)
+        return f"👍 {votes.amount}"
+    else:
+        return dash.no_update
 
 
 def save_entry(save: int, submit: int, value: str, project_name: str, _type: str):
