@@ -16,7 +16,7 @@ modal = html.Div(
                 dbc.ModalBody(
                     children=[
                         daq.NumericInput(
-                          id=f'{PAGE_PREFIX}-timer-length',
+                          id=f"{PAGE_PREFIX}-timer-length",
                           min=0,
                           max=10,
                           value=0
@@ -35,7 +35,7 @@ modal = html.Div(
 )
 
 layout = html.Div([
-    dcc.Location(id=f'{PAGE_PREFIX}-url'),
+    dcc.Location(id=f"{PAGE_PREFIX}-url"),
     dcc.Interval(id=f"{PAGE_PREFIX}-refresh", interval=10000, disabled=True),
     dcc.Interval(id=f"{PAGE_PREFIX}-timer-refresh", interval=1000, disabled=True),
     html.Span(id=f"{PAGE_PREFIX}-timer-start", style={"display": "none"}),
@@ -68,9 +68,14 @@ layout = html.Div([
     dbc.Row(
         children=[
             daq.BooleanSwitch(
-                id=f'{PAGE_PREFIX}-live-updates',
+                id=f"{PAGE_PREFIX}-live-updates",
                 on=False,
                 style={"margin-left": "10px"},
+            ),
+            dbc.Tooltip(
+                "If enabled, we'll poll for results from others",
+                target=f"{PAGE_PREFIX}-live-updates",
+                placement="right"
             ),
             html.B("Live Updates", style={"margin-left": "5px"})
         ]
