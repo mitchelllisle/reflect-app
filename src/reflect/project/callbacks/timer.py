@@ -1,10 +1,8 @@
-import time
 import datetime as dt
 import re
 
 import dash
 from dash.dependencies import Output, Input, State
-import funcy as fn
 
 from reflect.app import app
 from reflect.project.page import PAGE_PREFIX
@@ -28,10 +26,12 @@ def toggle_modal(n1, n2, n3, is_open):
         return not is_open
     return is_open
 
+
 @app.callback(
     [
         Output(f"{PAGE_PREFIX}-timer-countdown", "children"),
         Output(f"{PAGE_PREFIX}-timer-pretty", "children"),
+        Output(f"{PAGE_PREFIX}-timer-refresh", "disabled"),
     ],
     [
         Input(f"{PAGE_PREFIX}-timer-refresh", "n_intervals"),
@@ -49,15 +49,15 @@ def update_timer(refresh, start, end, countdown):
             parsed = dt.datetime.strptime(countdown, DATE_FORMAT)
             delta = dt.datetime.strptime(end, DATE_FORMAT) - now
             if delta.total_seconds() > 0:
-                return now, f"⏲ {TIME_DELTA_EXPR.search(str(delta)).group(1)}"
+                return now, f"⏲ {TIME_DELTA_EXPR.search(str(delta)).group(1)}", False
             else:
-                return now, "🎉 Timer Finished"
+                return now, "🎉 Timer Finished", True
         else:
             _start = dt.datetime.strptime(start, DATE_FORMAT)
             delta = dt.datetime.strptime(end, DATE_FORMAT) - dt.datetime.now()
-            return _start, f"⏲ {TIME_DELTA_EXPR.search(str(delta)).group(1)}"
+            return _start, f"⏲ {TIME_DELTA_EXPR.search(str(delta)).group(1)}", False
     else:
-        return dash.no_update, dash.no_update
+        return dash.no_update, dash.no_update, dash.no_update
 
 
 @app.callback(

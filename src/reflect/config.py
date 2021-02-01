@@ -58,8 +58,13 @@ class SemanticProjectNameConfig:
         return data
 
 
+class DashConfig(BaseSettings):
+    debug: bool = Field(env="DEBUG", default=False)
+
+
 class AppConfig:
     mysql = MySQLConfig()
     colour = ColourConfig()
     assets = AssetConfig()
     semantic_naming = SemanticProjectNameConfig()
+    dash = DashConfig()

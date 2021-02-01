@@ -1,3 +1,4 @@
+import dash
 import os
 from pathlib import Path
 import logging
@@ -13,3 +14,8 @@ def get_file(name: str) -> str:
 
 def _get_query_params(url: str) -> Dict:
     return parse_qs(urlparse(url).query)
+
+
+def get_triggered_component() -> str:
+    ctx = dash.callback_context
+    return ctx.triggered[0]['prop_id'].split('.')[0]

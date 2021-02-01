@@ -7,6 +7,18 @@ from reflect.utils import _get_query_params
 
 
 @app.callback(
+    Output(component_id=f'{PAGE_PREFIX}-refresh', component_property='disabled'),
+    [Input(component_id=f'{PAGE_PREFIX}-live-updates', component_property='on')],
+)
+def live_updates(on: bool):
+    if on:
+        return False
+    else:
+        return True
+
+
+
+@app.callback(
     Output(component_id=f'{PAGE_PREFIX}-name', component_property='children'),
     [Input(component_id=f'{PAGE_PREFIX}-url', component_property='href')],
 )

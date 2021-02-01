@@ -36,8 +36,8 @@ modal = html.Div(
 
 layout = html.Div([
     dcc.Location(id=f'{PAGE_PREFIX}-url'),
-    dcc.Interval(id=f"{PAGE_PREFIX}-refresh", interval=1000, max_intervals=3600),
-    dcc.Interval(id=f"{PAGE_PREFIX}-timer-refresh", interval=1000),
+    dcc.Interval(id=f"{PAGE_PREFIX}-refresh", interval=10000, disabled=True),
+    dcc.Interval(id=f"{PAGE_PREFIX}-timer-refresh", interval=1000, disabled=True),
     html.Span(id=f"{PAGE_PREFIX}-timer-start", style={"display": "none"}),
     html.Span(id=f"{PAGE_PREFIX}-timer-end", style={"display": "none"}),
     modal,
@@ -64,6 +64,17 @@ layout = html.Div([
     dbc.Button("Start Timer", id=f"{PAGE_PREFIX}-timer", color="link", style={"padding-left": "0px"}),
     html.H2(id=f"{PAGE_PREFIX}-timer-pretty"),
     html.Span(id=f"{PAGE_PREFIX}-timer-countdown", style={"display": "none"}),
+    html.Br(),
+    dbc.Row(
+        children=[
+            daq.BooleanSwitch(
+                id=f'{PAGE_PREFIX}-live-updates',
+                on=False,
+                style={"margin-left": "10px"},
+            ),
+            html.B("Live Updates", style={"margin-left": "5px"})
+        ]
+    ),
     html.Br(),
     html.Br(),
     dbc.Row([
