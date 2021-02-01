@@ -21,7 +21,7 @@ layout = html.Div(
             ),
             dbc.Button(
                 id=f"{PAGE_PREFIX}-save",
-                children="Create",
+                children=html.B("Create"),
                 external_link=True,
                 disabled=True,
                 style={

@@ -43,7 +43,7 @@ def create_project(name: str, save: int):
     if name:
         cleaned = clean_up_name(name)
         try:
-            if reflectdb.check_project_name(name) is not None:
+            if reflectdb.check_project_name(cleaned) is not None:
                 raise IntegrityError(f"project with name {name} already exists")
             if save:
                 reflectdb.save_project(cleaned)
