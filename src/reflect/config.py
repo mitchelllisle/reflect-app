@@ -35,7 +35,7 @@ class ColourConfig:
 
 
 class AssetConfig:
-    logo = "/assets/logo.png"
+    logo = "/assets/favicon.ico"
     missing = "/assets/404.gif"
 
     good = "😀"
