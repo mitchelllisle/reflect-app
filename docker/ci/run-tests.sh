@@ -1,10 +1,10 @@
 #!/usr/bin/env sh
 set -e
 
-sudo python3 -m pip install --upgrade pip
-sudo python3 -m pip install -U pip setuptools
+sudo python -m pip install --upgrade pip
+sudo python -m pip install -U pip setuptools
 
-sudo pip3 install --user -r requirements/tests.txt
-sudo pip3 install --user .
+sudo pip install --user -r requirements/tests.txt
+sudo pip install --user .
 
-sudo python3 -m pytest --headless --cov=reflect
+sudo python -m pytest --headless --cov=reflect
