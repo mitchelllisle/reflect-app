@@ -8,7 +8,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Install Tests
-      run: pip install -r requirements/tests
+      run: pip install -r requirements/tests.txt
     - name: Install App
       run: pip install .
     - name: Run Tests
