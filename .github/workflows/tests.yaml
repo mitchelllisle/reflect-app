@@ -1,0 +1,15 @@
+name: Run Tests
+
+on: [push]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install Tests
+      run: pip install -r requirements/tests
+    - name: Install App
+      run: pip install .
+    - name: Run Tests
+      run: pytest --headless --cov=reflect
