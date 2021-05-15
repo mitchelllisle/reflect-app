@@ -13,18 +13,27 @@ from reflect.database.mysql import reflectdb, Entry
 from reflect.utils import get_triggered_component
 
 
+def vote_link(votes: int = 0) -> dbc.Button:
+    return dbc.Button(f'👍 {votes}', color='link', style={'padding': 0})
+
+
 def create_elements(existing: List[Entry], colour: str) -> List[dbc.ListGroupItem]:
     return [
-        dbc.ListGroupItem(
-            children=[
-                dbc.Button(v.text, id={"type": "entry-display", "index": v.id}, color="link", outline=False),
-                html.Div(
-                    f"👍 {0 if v.votes is None else v.votes}",
-                    id={"type": "like-counter", "index": v.id},
-                    style={"float": "right"})
-            ],
-            style={"border": f"1px solid {colour}"}
-        ) for v in existing
+        html.A(
+            id={"type": "entry-display", "index": v.id},
+            children=dbc.ListGroupItem(
+                children=[
+                    html.Span(v.text),
+                    html.Div(
+                        children=vote_link(0 if v.votes is None else v.votes),
+                        id={"type": "like-counter", "index": v.id},
+                        style={"float": "right"}
+                    )
+                ],
+                style={"border": f"1px solid {colour}"}
+            )
+        )
+        for v in existing
     ]
 
 
@@ -43,7 +52,7 @@ def update_vote(clicks: int, project: str, entry: str):
     if clicks:
         reflectdb.save_vote(project, entry_id)
         votes = reflectdb.get_votes(entry_id)
-        return f"👍 {votes.amount}"
+        return vote_link(votes.amount)
     else:
         return dash.no_update
 
@@ -80,7 +89,7 @@ def save_entry(save: int, submit: int, value: str, project_name: str, _type: str
     ]
 )
 def get_entries(
-        interval: int, project_name: str,
+        _: int, project_name: str,
         great_submit: int, great_input: int,
         wonder_submit: int, wonder_input: int,
         bad_submit: int, bad_input: int,

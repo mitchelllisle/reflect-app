@@ -1,0 +1,3 @@
+include src/reflect/assets/*
+include src/reflect/assets/data/*
+include src/reflect/database/migrations/*

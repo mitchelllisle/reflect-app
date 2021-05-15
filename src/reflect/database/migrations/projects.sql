@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS project_entries (
     last_updated timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     KEY project_entries_type_idx (type) USING BTREE,
-    CONSTRAINT project_entries_project_name FOREIGN KEY (project_name) REFERENCES projects (name)
+    CONSTRAINT project_entries_project_name_ FOREIGN KEY (project_name) REFERENCES projects (name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS project_entries_votes (
@@ -29,5 +29,5 @@ CREATE TABLE IF NOT EXISTS project_entries_votes (
   PRIMARY KEY (id),
   KEY entry_id (entry_id),
   KEY project_entries_votes_project_name_idx (project_name) USING BTREE,
-  CONSTRAINT project_entries_votes_ibfk_1 FOREIGN KEY (entry_id) REFERENCES project_entries (id)
+  CONSTRAINT project_entries_votes_ibfk_1_ FOREIGN KEY (entry_id) REFERENCES project_entries (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

@@ -10,6 +10,7 @@ NavLink = fn.partial(
 navbar = dbc.Navbar(
     [
         dbc.Col(html.A(dbc.NavbarBrand("Reflect", href="/", style={"font-weight": "bold", "font-size": "30px"}))),
+        NavLink("Home", href="/"),
         NavLink("Projects", href="/projects"),
         NavLink("About", href="/about")
     ],

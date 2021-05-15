@@ -3,8 +3,11 @@ import re
 
 import dash
 from dash.dependencies import Output, Input, State
+import dash_html_components as html
+import dash_bootstrap_components as dbc
 
 from reflect.app import app
+from reflect.config import AppConfig
 from reflect.project.page import PAGE_PREFIX
 
 
@@ -42,16 +45,26 @@ def toggle_modal(n1, n2, n3, is_open):
         State(f"{PAGE_PREFIX}-timer-countdown", "children")
     ],
 )
-def update_timer(refresh, start, end, countdown):
+def update_timer(_, start, end, countdown):
     if start:
         if countdown:
             now = dt.datetime.now()
-            parsed = dt.datetime.strptime(countdown, DATE_FORMAT)
             delta = dt.datetime.strptime(end, DATE_FORMAT) - now
             if delta.total_seconds() > 0:
                 return now, f"⏲ {TIME_DELTA_EXPR.search(str(delta)).group(1)}", False
             else:
-                return now, "🎉 Timer Finished", True
+                return (
+                    now,
+                    dbc.Row([
+                        html.P("🎉 Timer Finished", style={'margin-top': 'none', 'margin-left': '12px'}),
+                        html.Img(
+                            src=AppConfig.assets.bean,
+                            width=50,
+                            height=67
+                        ),
+                    ]),
+                    True
+                )
         else:
             _start = dt.datetime.strptime(start, DATE_FORMAT)
             delta = dt.datetime.strptime(end, DATE_FORMAT) - dt.datetime.now()

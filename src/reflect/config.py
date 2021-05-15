@@ -37,6 +37,7 @@ class ColourConfig:
 class AssetConfig:
     logo = "/assets/favicon.ico"
     missing = "/assets/404.gif"
+    bean = '/assets/bean.gif'
 
     good = "😀"
     wondering = "🤔"

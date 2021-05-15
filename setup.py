@@ -25,7 +25,7 @@ setup(
     packages=find_packages('src'),
     package_data={
         'src.reflect.database.migrations': read_files_in_path('src/reflect/database/migrations', ".sql$"),
-        'src.reflect.assets': read_files_in_path("src/reflect/assets", ".(png|jpeg|jpg)$")
+        'src.reflect.assets': read_files_in_path("src/reflect/assets", ".(png|jpeg|jpg|css)$")
     },
     package_dir={'': 'src'},
     url='https://github.com/mitchelllisle/reflect-app',
